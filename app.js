@@ -1,13 +1,18 @@
-import express from 'express'
-import * as dotenv from 'dotenv'
-import dbConnect from './config/db.config.js'
+import express from "express";
+import * as dotenv from "dotenv";
+import dbConnect from "./config/db.config.js";
+import userRouter from "./routes/user.routes.js";
 
-dotenv.config()
+dotenv.config();
 
-dbConnect()
+dbConnect();
 
-const app = express()
-app.use(express.json())
+const app = express();
+app.use(express.json());
 
-app.listen(Number(process.env.PORT),
-    () => console.log(`server on port ${process.env.PORT}!'`))
+// 8080/user
+app.use("/user", userRouter);
+
+app.listen(Number(process.env.PORT), () =>
+  console.log(`server on port ${process.env.PORT}!`)
+);
