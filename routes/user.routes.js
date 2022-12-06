@@ -2,6 +2,8 @@ import express from 'express'
 import bcrypt from 'bcrypt'
 import UserModel from '../models/user.model.js'
 import generateToken from '../config/jwt.config.js'
+import isAuth from '../middlewares/isAuth.js'
+import attachCurrentUser from '../middlewares/attachCurrentUser.js'
 
 const router = express.Router()
 const rounds = 10
