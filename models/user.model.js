@@ -2,6 +2,11 @@ import { model, Schema } from "mongoose"
 
 const userSchema = new Schema(
     {
+        name: {
+            type: String,
+            required: true,
+            trim: true
+        },
         email: {
             type: String,
             required: true,
@@ -14,13 +19,49 @@ const userSchema = new Schema(
             required: true
         },
         profileImg: {
+            type: String,
+            required: true
+        },
+        isAdmin: {
+            type: Boolean,
+            default: false
+        },
+        phone: {
             type: String
         },
-        role: {
+        department: {
             type: String,
-            enum: ['usuário', 'admin'],
-            default: 'usuário'
-        }
+        },
+        salary: {
+            type: Number
+        },
+        status: {
+            type: String,
+            enum: ["Disponível", "Alocado", "De Férias", "De Licença", "Produto"]
+        },
+        birthDate: {
+            type: Date,
+        },
+        admissionDate: {
+            type: Date
+        },
+        active: {
+            type: Boolean,
+            default: true
+        },
+        address: {
+            city: { type: String },
+            state: { type: String }
+        },
+        todos: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: "Todo"
+            }
+        ]
+    },
+    {
+        timestamps: true,
     }
 )
 

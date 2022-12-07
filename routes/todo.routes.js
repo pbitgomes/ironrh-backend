@@ -1,6 +1,5 @@
 import express from 'express'
-import EmployeeModel from '../models/employee.models.js'
-import TodoModel from '../models/todo.models.js'
+import TodoModel from '../models/todo.model.js'
 
 const router = express.Router()
 
@@ -27,7 +26,7 @@ router.post('/create/:employeeId', async (request, response) => {
             }
         )
 
-        await EmployeeModel.findByIdAndUpdate(
+        await UserModel.findByIdAndUpdate(
             employeeId,
             { $push: { todos: createNew._id} }
         )
@@ -62,7 +61,7 @@ router.delete('/delete/:id', async (request, response) => {
     
         const deleteTodo = await TodoModel.findByIdAndDelete(id)
 
-        await EmployeeModel.findByIdAndUpdate(
+        await UserModel.findByIdAndUpdate(
             deleteTodo.responsable,
             { $pull: { todos: deleteTodo._id } }
         )

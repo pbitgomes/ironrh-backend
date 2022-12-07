@@ -2,13 +2,38 @@ import express from 'express'
 import bcrypt from 'bcrypt'
 import UserModel from '../models/user.model.js'
 import generateToken from '../config/jwt.config.js'
-import isAuth from '../middlewares/isAuth.js'
-import attachCurrentUser from '../middlewares/attachCurrentUser.js'
 
 const router = express.Router()
 const rounds = 10
 
-// cadastro do usuário
+router.get('/', async (request, response) => {
+    try {
+        const users = await UserModel.find().populate("todos")
+
+        return response.status(200).json(users)
+    } catch (error) {
+        console.log(error)
+        return response.status(500).json({ msg: "Algo está errado."})
+    }
+})
+
+router.get('/:id', async (request, response) => {
+    try {
+        const { id } = request.params
+
+        const employee = await UserModel.findById(id).populate("todos")
+
+        if(!employee) {
+            return response.status(404).json("Funcionário não foi encontrado")
+        }
+
+        return response.status(200).json(employee)
+    } catch (error) {
+        console.log(error)
+        return response.status(500).json({ msg: "Algo está errado."})
+    }
+})
+
 router.post("/register", async (request, response) => {
     try {
         const { password } = request.body
@@ -17,9 +42,7 @@ router.post("/register", async (request, response) => {
             return response.status(400).json({msg: "senha não foi inserida"})
         }
 
-        // pedindo pro bcrypt fazer a string da senha
         const saltString = await bcrypt.genSalt(rounds)
-        // criar o hash da nossa senha
         const hashPassword = await bcrypt.hash(password, saltString)
 
         const user = await UserModel.create({
@@ -27,7 +50,6 @@ router.post("/register", async (request, response) => {
             password: hashPassword
         })
 
-        // deleta a senha na hora da visualização do return
         delete user._doc.password
 
         return response.status(201).json(user)
@@ -37,20 +59,16 @@ router.post("/register", async (request, response) => {
     }
 })
 
-// realizar o login
 router.post("/login", async (request, response) => {
     try {
         const { email, password } = request.body
 
-        // encontrar o usuário
         const user = await UserModel.findOne({ email: email })
 
-        // checar se o usuário existe ou não
         if(!user) {
             return response.status(400).json({ msg: "senha e e-mail não está cadastrado"})
         }
 
-        // comparar senhas
         if(await bcrypt.compare(password, user.password)) {
             delete user._doc.password
             const token = generateToken(user)
@@ -68,24 +86,21 @@ router.post("/login", async (request, response) => {
     }
 })
 
-// get do usuário logado para recuperar no front-end
-router.get("/profile", isAuth, attachCurrentUser, async (request, response) => {
+router.put('/edit', async (request, response) => {
     try {
-        const loggedUser = request.currentUser
-
-        // checar se realmente temos um usuário logado
-        if(!loggedUser) {
-            return response.status(404).json({msg: 'usuário não encontrado'})
-        }
-
-        const user = await UserModel.findById(loggedUser._id)
-
-        // retirar informações sensíveis
-        delete user._doc.password
-
-        return response.status(200).json(user)
+        
     } catch (error) {
-        return response.status(500).json({ msg: 'algo deu errado'})
+        console.log(error)
+        return response.status(500).json({ msg: 'algo deu errado' })
+    }
+})
+
+router.delete('', async (request, response) => {
+    try {
+        
+    } catch (error) {
+        console.log(error)
+        return response.status(500).json({ msg: 'algo deu errado' })
     }
 })
 

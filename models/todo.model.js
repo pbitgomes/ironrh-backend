@@ -3,14 +3,20 @@ import { model, Schema } from "mongoose";
 const todoSchema = new Schema(
     {
         title: {
-            type: String
+            type: String,
+            required: true
         },
         description: {
             type: String,
             maxlength: 50
         },
         deadline: {
-            type: Date
+            type: Date,
+            required: true
+        },
+        progress: {
+            type: String,
+            enum: ["Não iniciado", "Em Progresso", "Finalizado"]
         },
         responsable: {
             type: Schema.Types.ObjectId,
