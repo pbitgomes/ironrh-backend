@@ -1,13 +1,28 @@
 import express from 'express'
 import TodoModel from '../models/todo.model.js'
+import UserModel from '../models/user.model.js'
 
 const router = express.Router()
 
 router.get('/', async (request, response) => {
     try {
-        const todos = await TodoModel.find().populate("responsable")
+        const todos = await TodoModel.find().populate("responsable").sort({deadline: 1})
 
         return response.status(200).json(todos)
+    } catch (error) {
+        console.log(error)
+
+        return response.status(500).json({ msg: "Algo está errado." })
+    }
+})
+
+router.get('/:id', async (request, response) => {
+    try {
+        const { id } = request.params
+
+        const getTodoById = await TodoModel.findById(id).populate("responsable")
+
+        return response.status(200).json(getTodoById)
     } catch (error) {
         console.log(error)
 
