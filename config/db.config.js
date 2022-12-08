@@ -1,13 +1,13 @@
-import jwt from "jsonwebtoken";
+import mongoose from "mongoose"
 
-const generateToken = (user) => {
-  const { _id, name, email, role } = user;
-  const signature = process.env.TOKEN_SIGN_SECRET;
-  const expiration = "12h";
+async function connect() {
+    try {
+        const dbConnect = await mongoose.connect(process.env.MONGODB_URI)
 
-  return jwt.sign({ _id, name, email, role }, signature, {
-    expiresIn: expiration,
-  });
-};
+        console.log(`conectado ao db ${dbConnect.connection.name}`)
+    } catch (error) {
+        console.log(error)
+    }
+}
 
-export default generateToken;
+export default connect
