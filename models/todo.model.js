@@ -20,7 +20,7 @@ const todoSchema = new Schema(
         },
         responsable: {
             type: Schema.Types.ObjectId,
-            ref: "Employee"
+            ref: "User"
         }
     },
     {
