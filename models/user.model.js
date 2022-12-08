@@ -1,32 +1,3 @@
-<<<<<<< HEAD
-import { model, Schema } from "mongoose";
-
-const userSchema = new Schema({
-  email: {
-    type: String,
-    required: true,
-    unique: true,
-    trim: true,
-    match: /[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+/gm,
-  },
-  password: {
-    type: String,
-    required: true,
-  },
-  profileImg: {
-    type: String,
-  },
-  role: {
-    type: String,
-    enum: ["usuário", "admin"],
-    default: "usuário",
-  },
-});
-
-const UserModel = model("User", userSchema);
-
-export default UserModel;
-=======
 import { model, Schema } from "mongoose"
 
 const userSchema = new Schema(
@@ -97,4 +68,3 @@ const userSchema = new Schema(
 const UserModel = model("User", userSchema)
 
 export default UserModel
->>>>>>> 22108a20a7142cb07c328d9c627539b0f89c69e4
